@@ -46,7 +46,7 @@ export default function MessageList() {
   }, [messages.length])
 
   return (
-    <div className="flex-1 overflow-y-auto px-4 py-2 flex flex-col gap-1">
+    <div className="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-1 bg-notion-canvas">
       <div ref={topRef} className="h-1" />
       {messages.map((msg) => <MessageItem key={msg._id} message={msg} />)}
       <div ref={bottomRef} />

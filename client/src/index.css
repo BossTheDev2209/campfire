@@ -3,11 +3,17 @@
 @tailwind utilities;
 
 body {
-  background-color: #313338;
-  color: #DBDEE1;
-  font-family: 'gg sans', 'Noto Sans', Whitney, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: #f6f5f4;
+  color: #1a1a1a;
+  font-family: Inter, 'Notion Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 }
 
-::-webkit-scrollbar { width: 4px; }
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #c8c4be transparent;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #1e1f22; border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: #c8c4be; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #a4a097; }

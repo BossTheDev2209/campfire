@@ -31,7 +31,7 @@ export default function AppPage() {
   }, [channelId, channels])
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden">
+    <div className="flex h-screen w-screen overflow-hidden bg-notion-surface text-notion-ink font-notion">
       <ServerList />
       <ChannelList />
       <ChatArea />

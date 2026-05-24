@@ -8,16 +8,16 @@ export default function ServerList() {
   const navigate = useNavigate()
 
   return (
-    <div className="w-[72px] bg-dc-servers flex flex-col items-center py-3 gap-2 overflow-y-auto shrink-0">
+    <div className="w-[72px] bg-notion-surface flex flex-col items-center py-3 gap-2 overflow-y-auto shrink-0 border-r border-notion-hairline">
       {servers.map((s) => (
         <button key={s._id}
           onClick={() => navigate(`/app/${s._id}`)}
           title={s.name}
           className={clsx(
-            'w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg transition-all',
+            'w-12 h-12 rounded-notionLg flex items-center justify-center font-semibold text-sm transition-colors border',
             serverId === s._id
-              ? 'rounded-2xl bg-dc-accent'
-              : 'bg-dc-sidebar hover:rounded-2xl hover:bg-dc-accent'
+              ? 'bg-notion-primary text-white border-notion-primary shadow-sm'
+              : 'bg-notion-canvas text-notion-charcoal border-notion-hairline hover:bg-notion-surfaceSoft hover:border-notion-hairlineStrong'
           )}>
           {s.icon ? (
             <img src={s.icon} alt={s.name} className="w-12 h-12 rounded-[inherit] object-cover" />

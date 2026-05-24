@@ -6,15 +6,19 @@ export default function ChatArea() {
   const activeChannel = useAppStore((s) => s.activeChannel)
 
   if (!activeChannel) return (
-    <div className="flex-1 bg-dc-bg flex items-center justify-center">
-      <p className="text-dc-muted">Select a channel to start chatting</p>
+    <div className="flex-1 bg-notion-canvas flex items-center justify-center">
+      <div className="text-center">
+        <p className="text-notion-charcoal font-medium">Select a channel</p>
+        <p className="text-notion-stone text-sm mt-1">Messages will appear here.</p>
+      </div>
     </div>
   )
 
   return (
-    <div className="flex-1 bg-dc-bg flex flex-col overflow-hidden">
-      <div className="h-12 px-4 flex items-center border-b border-black/20 font-semibold text-dc-text shrink-0">
-        # {activeChannel.name}
+    <div className="flex-1 bg-notion-canvas flex flex-col overflow-hidden">
+      <div className="h-12 px-4 flex items-center border-b border-notion-hairline font-semibold text-notion-charcoal shrink-0">
+        <span className="text-notion-stone mr-2">#</span>
+        {activeChannel.name}
       </div>
       <MessageList />
       <MessageInput />
