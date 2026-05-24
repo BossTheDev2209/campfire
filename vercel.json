@@ -1,0 +1,12 @@
+{
+  "buildCommand": "cd client && bun run build",
+  "installCommand": "cd client && bun install",
+  "outputDirectory": "client/dist",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

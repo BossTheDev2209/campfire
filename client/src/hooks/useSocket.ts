@@ -60,7 +60,7 @@ export function useSocket() {
     if (!token || initialized.current) return
     initialized.current = true
 
-    socket = io('/', { auth: { token } })
+    socket = io(import.meta.env.VITE_SOCKET_URL ?? '/', { auth: { token } })
 
     socket.on('message:new', (msg: Message) => addMessage(msg))
     socket.on('message:updated', ({ messageId, content, editedAt }: MessageUpdatedPayload) =>
