@@ -32,25 +32,25 @@ export default function MessageInput() {
   if (!activeChannel || activeChannel.type !== 'text') return null
 
   return (
-    <form onSubmit={send} className="px-4 pb-5 pt-3 shrink-0 border-t border-notion-hairline bg-notion-canvas">
-      <div className="min-h-[44px] bg-notion-surface rounded-notionMd flex items-center px-3 gap-2 border border-notion-hairline focus-within:border-notion-primary focus-within:ring-2 focus-within:ring-notion-primary/10 transition-colors">
+    <form onSubmit={send} className="px-4 pb-5 pt-3 shrink-0 border-t border-claude-hairline bg-claude-canvas">
+      <div className="min-h-11 bg-claude-surfaceSoft rounded-claudeMd flex items-center px-3 gap-2 border border-claude-hairline focus-within:border-claude-primary focus-within:ring-2 focus-within:ring-claude-primary/15 transition-colors">
         <input
           ref={inputRef}
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder={`Message #${activeChannel.name}`}
           disabled={sending}
-          className="flex-1 bg-transparent text-notion-ink placeholder-notion-stone outline-none text-sm disabled:opacity-60 py-2"
+          className="flex-1 bg-transparent text-claude-ink placeholder-claude-mutedSoft outline-none text-sm disabled:opacity-60 py-2"
         />
         <button
           type="submit"
           disabled={!content.trim() || sending}
-          className="min-h-[40px] px-4 rounded-notionSm text-white bg-notion-primary hover:bg-notion-primaryPressed disabled:bg-notion-hairline disabled:text-notion-muted transition-colors text-sm font-medium shrink-0"
+          className="h-10 px-4 rounded-claudeMd text-claude-onPrimary bg-claude-primary hover:bg-claude-primaryActive disabled:bg-claude-primaryDisabled disabled:text-claude-mutedSoft transition-colors text-sm font-medium shrink-0"
         >
           {sending ? 'Sending' : 'Send'}
         </button>
       </div>
-      {sendError && <p className="mt-2 text-xs text-notion-error">{sendError}</p>}
+      {sendError && <p className="mt-2 text-xs text-claude-error">{sendError}</p>}
     </form>
   )
 }

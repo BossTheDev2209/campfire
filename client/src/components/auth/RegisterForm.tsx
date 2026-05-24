@@ -29,27 +29,27 @@ export default function RegisterForm() {
 
   return (
     <form onSubmit={submit} className="flex flex-col gap-4">
-      {error && <p className="rounded-notionMd bg-red-50 px-3 py-2 text-notion-error text-sm border border-red-100">{error}</p>}
+      {error && <p className="rounded-claudeMd bg-claude-surfaceSoft px-3 py-2 text-claude-error text-sm border border-claude-hairline">{error}</p>}
       <label className="flex flex-col gap-1">
-        <span className="text-xs font-semibold text-notion-stone uppercase tracking-wide">Username</span>
+        <span className="text-xs font-semibold text-claude-muted uppercase tracking-wide">Username</span>
         <input value={username} onChange={(e) => setUsername(e.target.value)}
           required minLength={2}
-          className="h-11 bg-notion-canvas text-notion-ink rounded-notionMd px-3 outline-none border border-notion-hairlineStrong focus:border-notion-primary focus:ring-2 focus:ring-notion-primary/10 text-sm" />
+          className="h-10 w-full rounded-claudeMd border border-claude-hairline bg-claude-canvas px-3 text-sm text-claude-ink outline-none focus:border-claude-primary focus:ring-2 focus:ring-claude-primary/15" />
       </label>
       <label className="flex flex-col gap-1">
-        <span className="text-xs font-semibold text-notion-stone uppercase tracking-wide">Email</span>
+        <span className="text-xs font-semibold text-claude-muted uppercase tracking-wide">Email</span>
         <input value={email} onChange={(e) => setEmail(e.target.value)}
           type="email" required
-          className="h-11 bg-notion-canvas text-notion-ink rounded-notionMd px-3 outline-none border border-notion-hairlineStrong focus:border-notion-primary focus:ring-2 focus:ring-notion-primary/10 text-sm" />
+          className="h-10 w-full rounded-claudeMd border border-claude-hairline bg-claude-canvas px-3 text-sm text-claude-ink outline-none focus:border-claude-primary focus:ring-2 focus:ring-claude-primary/15" />
       </label>
       <label className="flex flex-col gap-1">
-        <span className="text-xs font-semibold text-notion-stone uppercase tracking-wide">Password</span>
+        <span className="text-xs font-semibold text-claude-muted uppercase tracking-wide">Password</span>
         <input value={password} onChange={(e) => setPassword(e.target.value)}
           type="password" required minLength={6}
-          className="h-11 bg-notion-canvas text-notion-ink rounded-notionMd px-3 outline-none border border-notion-hairlineStrong focus:border-notion-primary focus:ring-2 focus:ring-notion-primary/10 text-sm" />
+          className="h-10 w-full rounded-claudeMd border border-claude-hairline bg-claude-canvas px-3 text-sm text-claude-ink outline-none focus:border-claude-primary focus:ring-2 focus:ring-claude-primary/15" />
       </label>
       <button type="submit" disabled={loading}
-        className="h-11 bg-notion-primary hover:bg-notion-primaryPressed disabled:bg-notion-hairline disabled:text-notion-muted text-white rounded-notionMd px-4 text-sm font-medium transition-colors mt-2">
+        className="h-10 w-full rounded-claudeMd bg-claude-primary px-4 text-sm font-medium text-claude-onPrimary hover:bg-claude-primaryActive disabled:bg-claude-primaryDisabled disabled:text-claude-mutedSoft transition-colors mt-2">
         {loading ? 'Creating account...' : 'Continue'}
       </button>
     </form>

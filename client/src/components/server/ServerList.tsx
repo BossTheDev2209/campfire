@@ -20,14 +20,14 @@ export default function ServerList({ error }: Props) {
   }
 
   return (
-    <div className="w-[72px] bg-notion-surface flex flex-col items-center py-3 gap-2 overflow-y-auto shrink-0 border-r border-notion-hairline">
+    <div className="w-[72px] bg-claude-surfaceDark text-claude-onDark flex flex-col items-center py-3 gap-2 overflow-y-auto shrink-0 border-r border-claude-surfaceDarkElevated">
       {error && (
-        <div className="w-12 rounded-notionMd bg-notion-tintRose border border-notion-hairline flex items-center justify-center py-1 px-1">
-          <span className="text-notion-error text-[10px] text-center leading-tight">!</span>
+        <div className="w-12 rounded-claudeMd bg-claude-surfaceDarkElevated border border-claude-surfaceDarkSoft flex items-center justify-center py-1 px-1">
+          <span className="text-claude-error text-[10px] text-center leading-tight">!</span>
         </div>
       )}
       {servers.length === 0 && !error && (
-        <div className="w-12 h-12 rounded-notionLg border border-dashed border-notion-hairlineStrong flex items-center justify-center text-notion-stone text-xs">
+        <div className="w-12 h-12 rounded-claudeLg border border-dashed border-claude-surfaceDarkSoft flex items-center justify-center text-claude-onDarkSoft text-xs">
           C
         </div>
       )}
@@ -37,10 +37,10 @@ export default function ServerList({ error }: Props) {
           onClick={() => navigate(`/app/${s._id}`)}
           title={s.name}
           className={clsx(
-            'w-12 h-12 rounded-notionLg flex items-center justify-center font-semibold text-sm transition-colors border',
+            'w-12 h-12 rounded-claudeLg flex items-center justify-center font-semibold text-sm transition-colors border',
             serverId === s._id
-              ? 'bg-notion-primary text-white border-notion-primary shadow-sm'
-              : 'bg-notion-canvas text-notion-charcoal border-notion-hairline hover:bg-notion-surfaceSoft hover:border-notion-hairlineStrong'
+              ? 'bg-claude-primary text-claude-onPrimary border-claude-primary shadow-sm'
+              : 'bg-claude-surfaceDarkElevated text-claude-onDark border-claude-surfaceDarkElevated hover:bg-claude-surfaceDarkSoft'
           )}
         >
           {s.icon ? (
@@ -50,17 +50,17 @@ export default function ServerList({ error }: Props) {
           )}
         </button>
       ))}
-      <div className="mt-auto flex flex-col items-center gap-2 pt-3 border-t border-notion-hairline w-full">
+      <div className="mt-auto flex flex-col items-center gap-2 pt-3 border-t border-claude-surfaceDarkElevated w-full">
         <div
           title={user?.username ?? 'Current user'}
-          className="w-9 h-9 rounded-notionMd bg-notion-canvas border border-notion-hairline flex items-center justify-center text-notion-charcoal text-xs font-semibold"
+          className="w-9 h-9 rounded-claudeMd bg-claude-surfaceDarkElevated border border-claude-surfaceDarkSoft flex items-center justify-center text-claude-onDark text-xs font-semibold"
         >
           {user?.username?.charAt(0).toUpperCase() ?? 'U'}
         </div>
         <button
           type="button"
           onClick={handleLogout}
-          className="text-[11px] text-notion-stone hover:text-notion-error rounded-notionSm px-2 py-2 min-h-[32px] focus:outline-none focus:ring-2 focus:ring-notion-primary/20 transition-colors"
+          className="text-[11px] text-claude-onDarkSoft hover:text-claude-error rounded-claudeSm px-2 py-2 min-h-[32px] focus:outline-none focus:ring-2 focus:ring-claude-primary/20 transition-colors"
         >
           Log out
         </button>

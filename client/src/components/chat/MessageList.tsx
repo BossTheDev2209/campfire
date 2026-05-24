@@ -52,22 +52,22 @@ export default function MessageList() {
   }, [messages.length])
 
   return (
-    <div className="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-1 bg-notion-canvas">
+    <div className="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-1 bg-claude-canvas">
       <div ref={topRef} className="h-1" />
       {loadingInitial && (
         <div className="space-y-2 animate-pulse">
-          <div className="h-10 rounded-notionMd bg-notion-surface" />
-          <div className="h-10 rounded-notionMd bg-notion-surfaceSoft" />
-          <div className="h-10 rounded-notionMd bg-notion-surface" />
+          <div className="h-10 rounded-claudeMd bg-claude-surfaceSoft" />
+          <div className="h-10 rounded-claudeMd bg-claude-surfaceCard" />
+          <div className="h-10 rounded-claudeMd bg-claude-surfaceSoft" />
         </div>
       )}
       {loadError && (
-        <div className="rounded-notionMd border border-notion-hairline bg-notion-surface px-3 py-2 text-sm text-notion-slate">
+        <div className="rounded-claudeLg border border-claude-hairline bg-claude-surfaceCard p-4 text-sm text-claude-body">
           {loadError}
         </div>
       )}
       {!loadingInitial && !loadError && messages.length === 0 && (
-        <div className="rounded-notionLg border border-notion-hairline bg-notion-surfaceSoft p-4 text-sm text-notion-slate">
+        <div className="rounded-claudeLg border border-claude-hairline bg-claude-surfaceCard p-4 text-sm text-claude-body">
           No messages yet. Start the conversation.
         </div>
       )}

@@ -80,7 +80,7 @@ export default function AppPage() {
   }, [channelId])
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-notion-surface text-notion-ink font-notion">
+    <div className="flex h-screen w-screen overflow-hidden bg-claude-canvas text-claude-ink font-claudeSans">
       <ServerList error={serverLoadError} />
       <ChannelList error={channelLoadError} />
       <ChatArea />

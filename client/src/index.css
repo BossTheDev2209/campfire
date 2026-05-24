@@ -3,17 +3,17 @@
 @tailwind utilities;
 
 body {
-  background-color: #f6f5f4;
-  color: #1a1a1a;
-  font-family: Inter, 'Notion Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background-color: #faf9f5;
+  color: #141413;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #c8c4be transparent;
+  scrollbar-color: #8e8b82 transparent;
 }
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #c8c4be; border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background: #a4a097; }
+::-webkit-scrollbar-thumb { background: #8e8b82; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #6c6a64; }

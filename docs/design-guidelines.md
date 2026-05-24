@@ -2,17 +2,29 @@
 
 Use `DESIGN.md` as the main visual instruction before writing any UI.
 
+## Current Design Source
+
+`DESIGN.md` is now the Claude/Anthropic-inspired source of truth. The app should adapt the brand into product UI, not recreate a marketing page.
+
+Implementation rules:
+- Cream canvas is the default app floor.
+- Coral is reserved for primary actions, focus, and selected/current state.
+- Dark warm surfaces are used sparingly for contrast, not as a Discord-style dark theme.
+- Serif display type is allowed for auth headings and empty-state headings only.
+- Dense chat/sidebar UI uses sans-serif labels and compact spacing.
+- Do not add invite, search, voice, or profile flows as part of visual migration.
+
 ## Product Translation
 
-Campfire uses Notion-inspired product UI, not Notion marketing pages.
+Campfire uses Claude/Anthropic-inspired product UI, not marketing pages.
 
 ## Rules
 
-- Use restrained workspace surfaces.
-- Use `#5645d4` only for primary actions, active selections, focus states, and important badges.
+- Use warm cream workspace surfaces.
+- Use `#cc785c` only for primary actions, active selections, focus states, and important badges.
 - Use 8px radius for buttons and inputs.
 - Use 12px radius for panels and cards.
-- Use Inter/Notion Sans style typography.
+- Use Inter/claudeSans typography for dense UI; Cormorant Garamond serif for auth/empty-state headings only.
 - Keep chat dense and scannable.
 - Use skeletons or quiet empty states, not centered spinners everywhere.
 - Avoid nested cards.

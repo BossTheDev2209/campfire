@@ -18,14 +18,15 @@ Focused, time-constrained, and evaluating whether the app works. The interface s
 
 ## Design Direction
 
-Use the installed Notion-inspired DESIGN.md as the main visual source. Translate it into a product UI: restrained surfaces, sober geometry, clear hierarchy, compact controls, and predictable states.
+Use the installed Claude/Anthropic-inspired DESIGN.md as the main visual source. Translate it into a product UI: warm cream canvas, coral primary actions, dark product-surface contrast where useful, editorial serif display moments for auth and empty states, compact sans UI labels, and predictable task-focused chat layout.
 
 ## Anti-References
 
-- Do not make a marketing landing page.
-- Do not copy Discord's exact dark theme after the Notion design migration.
-- Do not use decorative hero sections inside the app.
-- Do not use glassmorphism, gradient text, side-stripe card accents, or generic SaaS card grids.
+- Do not keep the Notion purple visual system after this migration.
+- Do not copy Discord's exact dark theme.
+- Do not make the authenticated app a Claude marketing page.
+- Do not use glassmorphism, gradient text, side-stripe accents, or generic SaaS card grids.
+- Do not use coral on every element; reserve it for primary/current states and a few high-signal moments.
 - Do not hide core chat actions behind unclear icons.
 
 ## Success Criteria
