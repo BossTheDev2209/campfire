@@ -56,7 +56,10 @@ export default function AppPage() {
   }, [serverId, servers, setActiveServer, setChannels, setMembers])
 
   useEffect(() => {
-    if (!channelId) return
+    if (!channelId) {
+      setActiveChannel(null)
+      return
+    }
     const channel = channels.find((c) => c._id === channelId)
     if (channel) setActiveChannel(channel)
   }, [channelId, channels, setActiveChannel])

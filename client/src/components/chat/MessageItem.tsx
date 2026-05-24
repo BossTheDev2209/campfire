@@ -56,11 +56,11 @@ export default function MessageItem({ message }: { message: Message }) {
       {isOwn && !editing && (
         <div className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100 flex gap-1 shrink-0">
           <button onClick={() => setEditing(true)}
-            className="text-notion-slate hover:text-notion-ink text-xs px-2 py-1 rounded-notionSm hover:bg-notion-canvas transition-colors border border-transparent hover:border-notion-hairline">
+            className="text-notion-slate hover:text-notion-ink text-xs px-2 py-1.5 min-h-[32px] rounded-notionSm hover:bg-notion-canvas transition-colors border border-transparent hover:border-notion-hairline">
             Edit
           </button>
           <button onClick={handleDelete}
-            className="text-notion-slate hover:text-notion-error text-xs px-2 py-1 rounded-notionSm hover:bg-notion-canvas transition-colors border border-transparent hover:border-notion-hairline">
+            className="text-notion-slate hover:text-notion-error text-xs px-2 py-1.5 min-h-[32px] rounded-notionSm hover:bg-notion-canvas transition-colors border border-transparent hover:border-notion-hairline">
             Delete
           </button>
         </div>

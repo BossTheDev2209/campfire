@@ -60,7 +60,7 @@ export default function ServerList({ error }: Props) {
         <button
           type="button"
           onClick={handleLogout}
-          className="text-[11px] text-notion-stone hover:text-notion-error rounded-notionSm px-1 py-1 focus:outline-none focus:ring-2 focus:ring-notion-primary/20 transition-colors"
+          className="text-[11px] text-notion-stone hover:text-notion-error rounded-notionSm px-2 py-2 min-h-[32px] focus:outline-none focus:ring-2 focus:ring-notion-primary/20 transition-colors"
         >
           Log out
         </button>

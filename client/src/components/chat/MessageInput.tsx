@@ -33,19 +33,19 @@ export default function MessageInput() {
 
   return (
     <form onSubmit={send} className="px-4 pb-5 pt-3 shrink-0 border-t border-notion-hairline bg-notion-canvas">
-      <div className="h-11 bg-notion-surface rounded-notionMd flex items-center px-3 gap-2 border border-notion-hairline focus-within:border-notion-primary focus-within:ring-2 focus-within:ring-notion-primary/10 transition-colors">
+      <div className="min-h-[44px] bg-notion-surface rounded-notionMd flex items-center px-3 gap-2 border border-notion-hairline focus-within:border-notion-primary focus-within:ring-2 focus-within:ring-notion-primary/10 transition-colors">
         <input
           ref={inputRef}
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder={`Message #${activeChannel.name}`}
           disabled={sending}
-          className="flex-1 bg-transparent text-notion-ink placeholder-notion-stone outline-none text-sm disabled:opacity-60"
+          className="flex-1 bg-transparent text-notion-ink placeholder-notion-stone outline-none text-sm disabled:opacity-60 py-2"
         />
         <button
           type="submit"
           disabled={!content.trim() || sending}
-          className="h-8 px-3 rounded-notionSm text-white bg-notion-primary hover:bg-notion-primaryPressed disabled:bg-notion-hairline disabled:text-notion-muted transition-colors text-sm font-medium"
+          className="min-h-[40px] px-4 rounded-notionSm text-white bg-notion-primary hover:bg-notion-primaryPressed disabled:bg-notion-hairline disabled:text-notion-muted transition-colors text-sm font-medium shrink-0"
         >
           {sending ? 'Sending' : 'Send'}
         </button>
