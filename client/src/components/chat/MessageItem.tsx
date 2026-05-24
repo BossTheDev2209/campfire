@@ -54,7 +54,7 @@ export default function MessageItem({ message }: { message: Message }) {
         )}
       </div>
       {isOwn && !editing && (
-        <div className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 flex gap-1 shrink-0">
+        <div className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100 flex gap-1 shrink-0">
           <button onClick={() => setEditing(true)}
             className="text-notion-slate hover:text-notion-ink text-xs px-2 py-1 rounded-notionSm hover:bg-notion-canvas transition-colors border border-transparent hover:border-notion-hairline">
             Edit
