@@ -11,7 +11,7 @@ import api from '@/api'
 export default function AppPage() {
   useSocket()
   const { serverId, channelId } = useParams()
-  const { setServers, setChannels, setActiveServer, setActiveChannel, servers, channels } = useAppStore()
+  const { setServers, setChannels, setActiveServerId, setActiveChannelId } = useAppStore()
 
   useEffect(() => {
     api.get('/servers').then((r) => setServers(r.data))
@@ -19,16 +19,14 @@ export default function AppPage() {
 
   useEffect(() => {
     if (!serverId) return
-    const server = servers.find((s) => s._id === serverId)
-    if (server) setActiveServer(server)
+    setActiveServerId(serverId)
     api.get(`/servers/${serverId}/channels`).then((r) => setChannels(r.data))
-  }, [serverId, servers])
+  }, [serverId])
 
   useEffect(() => {
     if (!channelId) return
-    const channel = channels.find((c) => c._id === channelId)
-    if (channel) setActiveChannel(channel)
-  }, [channelId, channels])
+    setActiveChannelId(channelId)
+  }, [channelId])
 
   return (
     <div className="flex h-screen w-screen overflow-hidden">
