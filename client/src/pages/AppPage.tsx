@@ -7,6 +7,7 @@ import MembersList from '@/components/layout/MembersList'
 import { joinChannel, joinServer, leaveChannel, useSocket } from '@/hooks/useSocket'
 import { useMembers } from '@/hooks/useMembers'
 import { useAppStore } from '@/store/appStore'
+import { useUIStore } from '@/store/uiStore'
 import api from '@/api'
 
 export default function AppPage() {
@@ -23,6 +24,9 @@ export default function AppPage() {
     activeServerId,
     activeChannelId,
   } = useAppStore()
+
+  const isMobileSidebarOpen = useUIStore((s) => s.isMobileSidebarOpen)
+  const setMobileSidebarOpen = useUIStore((s) => s.setMobileSidebarOpen)
 
   const [serverLoadError, setServerLoadError] = useState<string | null>(null)
   const [channelLoadError, setChannelLoadError] = useState<string | null>(null)
@@ -73,10 +77,35 @@ export default function AppPage() {
     }
   }, [activeChannelId])
 
+  // Automatically close mobile sidebar on navigation
+  useEffect(() => {
+    setMobileSidebarOpen(false)
+  }, [serverId, channelId, setMobileSidebarOpen])
+
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-claude-canvas text-claude-ink font-claudeSans">
-      <ServerList error={serverLoadError} />
-      <ChannelList error={channelLoadError} />
+    <div className="flex h-screen w-screen overflow-hidden bg-claude-canvas text-claude-ink font-claudeSans relative">
+      {/* Desktop sidebars */}
+      <div className="hidden md:flex shrink-0">
+        <ServerList error={serverLoadError} />
+        <ChannelList error={channelLoadError} />
+      </div>
+
+      {/* Mobile sidebar overlay drawer */}
+      {isMobileSidebarOpen && (
+        <div className="fixed inset-0 z-50 flex md:hidden">
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
+            onClick={() => setMobileSidebarOpen(false)}
+          />
+          {/* Drawer content container */}
+          <div className="relative flex h-full max-w-[312px] shadow-2xl z-10 animate-[slideIn_0.2s_ease-out]">
+            <ServerList error={serverLoadError} />
+            <ChannelList error={channelLoadError} />
+          </div>
+        </div>
+      )}
+
       <ChatArea />
       <MembersList error={memberLoadError} />
     </div>

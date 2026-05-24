@@ -17,3 +17,13 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #8e8b82; border-radius: 9999px; }
 ::-webkit-scrollbar-thumb:hover { background: #6c6a64; }
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
