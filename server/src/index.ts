@@ -24,8 +24,8 @@ app.use(express.json())
 
 app.use('/api/auth', authRoutes)
 app.use('/api/servers', serverRoutes)
-app.use('/api/channels', channelRoutes)
-app.use('/api/messages', messageRoutes)
+app.use('/api/servers', channelRoutes)
+app.use('/api', messageRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/invites', inviteRoutes)
 

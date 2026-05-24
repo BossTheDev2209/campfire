@@ -5,7 +5,7 @@ import { requireAuth, AuthRequest } from '../middleware/auth'
 const router = Router()
 router.use(requireAuth)
 
-router.get('/channels/:channelId', async (req: AuthRequest, res) => {
+router.get('/channels/:channelId/messages', async (req: AuthRequest, res) => {
   const { before, limit = '50' } = req.query as any
   const query: any = { channelId: req.params.channelId }
   if (before) query.createdAt = { $lt: new Date(before) }
@@ -18,7 +18,7 @@ router.get('/channels/:channelId', async (req: AuthRequest, res) => {
   res.json(shaped)
 })
 
-router.post('/channels/:channelId', async (req: AuthRequest, res) => {
+router.post('/channels/:channelId/messages', async (req: AuthRequest, res) => {
   const { content } = req.body
   if (!content?.trim()) return res.status(400).json({ error: 'Content required' })
   const msg = await Message.create({ channelId: req.params.channelId, authorId: req.userId, content })
