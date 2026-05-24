@@ -32,7 +32,7 @@ export function getSocket(): Socket | null {
 }
 
 export function joinServer(serverId: string): void {
-  socket?.emit('server:join', { serverId })
+  socket?.emit('server:join', serverId)
 }
 
 export function joinChannel(channelId: string): void {
