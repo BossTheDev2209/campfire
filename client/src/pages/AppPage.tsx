@@ -1,17 +1,18 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import ServerList from '@/components/server/ServerList'
 import ChannelList from '@/components/channel/ChannelList'
 import ChatArea from '@/components/chat/ChatArea'
 import MembersList from '@/components/layout/MembersList'
-import { useSocket } from '@/hooks/useSocket'
+import { useSocket, joinServer, joinChannel, leaveChannel } from '@/hooks/useSocket'
 import { useAppStore } from '@/store/appStore'
 import api from '@/api'
 
 export default function AppPage() {
   useSocket()
   const { serverId, channelId } = useParams()
-  const { setServers, setChannels, setActiveServer, setActiveChannel, servers, channels } = useAppStore()
+  const { setServers, setChannels, setActiveServerId, setActiveChannelId, activeServerId, activeChannelId } = useAppStore()
+  const prevChannelId = useRef<string | null>(null)
 
   useEffect(() => {
     api.get('/servers').then((r) => setServers(r.data))
@@ -19,16 +20,25 @@ export default function AppPage() {
 
   useEffect(() => {
     if (!serverId) return
-    const server = servers.find((s) => s._id === serverId)
-    if (server) setActiveServer(server)
+    setActiveServerId(serverId)
     api.get(`/servers/${serverId}/channels`).then((r) => setChannels(r.data))
-  }, [serverId, servers])
+  }, [serverId])
 
   useEffect(() => {
     if (!channelId) return
-    const channel = channels.find((c) => c._id === channelId)
-    if (channel) setActiveChannel(channel)
-  }, [channelId, channels])
+    setActiveChannelId(channelId)
+  }, [channelId])
+
+  useEffect(() => {
+    if (!activeServerId) return
+    joinServer(activeServerId)
+  }, [activeServerId])
+
+  useEffect(() => {
+    if (prevChannelId.current) leaveChannel(prevChannelId.current)
+    if (activeChannelId) joinChannel(activeChannelId)
+    prevChannelId.current = activeChannelId
+  }, [activeChannelId])
 
   return (
     <div className="flex h-screen w-screen overflow-hidden">

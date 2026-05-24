@@ -3,7 +3,8 @@ import { useAppStore } from '@/store/appStore'
 import clsx from 'clsx'
 
 export default function ChannelList() {
-  const { activeServer, channels } = useAppStore()
+  const { activeServerId, servers, channels } = useAppStore()
+  const activeServer = servers.find((s) => s._id === activeServerId) ?? null
   const { channelId } = useParams()
   const navigate = useNavigate()
   const { serverId } = useParams()

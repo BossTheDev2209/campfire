@@ -1,20 +1,22 @@
 import { create } from 'zustand'
-import { Server, Channel, Message, Member } from '@/types'
+import { User, Server, Channel, Message, Member } from '@/types'
 
 interface AppState {
+  user: User | null
   servers: Server[]
-  activeServer: Server | null
+  activeServerId: string | null
   channels: Channel[]
-  activeChannel: Channel | null
+  activeChannelId: string | null
   messages: Message[]
   members: Member[]
   onlineUsers: Set<string>
-  voiceUsers: Record<string, string[]> // channelId -> userId[]
+  voiceUsers: Record<string, string[]>
 
+  setUser: (user: User | null) => void
   setServers: (servers: Server[]) => void
-  setActiveServer: (server: Server | null) => void
+  setActiveServerId: (id: string | null) => void
   setChannels: (channels: Channel[]) => void
-  setActiveChannel: (channel: Channel | null) => void
+  setActiveChannelId: (id: string | null) => void
   setMessages: (messages: Message[]) => void
   prependMessages: (messages: Message[]) => void
   addMessage: (message: Message) => void
@@ -29,19 +31,21 @@ interface AppState {
 }
 
 export const useAppStore = create<AppState>((set) => ({
+  user: null,
   servers: [],
-  activeServer: null,
+  activeServerId: null,
   channels: [],
-  activeChannel: null,
+  activeChannelId: null,
   messages: [],
   members: [],
   onlineUsers: new Set(),
   voiceUsers: {},
 
+  setUser: (user) => set({ user }),
   setServers: (servers) => set({ servers }),
-  setActiveServer: (activeServer) => set({ activeServer }),
+  setActiveServerId: (activeServerId) => set({ activeServerId }),
   setChannels: (channels) => set({ channels }),
-  setActiveChannel: (activeChannel) => set({ activeChannel }),
+  setActiveChannelId: (activeChannelId) => set({ activeChannelId }),
   setMessages: (messages) => set({ messages }),
   prependMessages: (older) => set((s) => ({ messages: [...older, ...s.messages] })),
   addMessage: (message) => set((s) => ({ messages: [...s.messages, message] })),

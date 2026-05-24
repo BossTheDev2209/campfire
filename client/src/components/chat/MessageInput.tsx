@@ -7,7 +7,8 @@ import { getSocket } from '@/hooks/useSocket'
 export default function MessageInput() {
   const { channelId } = useParams()
   const [content, setContent] = useState('')
-  const { activeChannel, addMessage } = useAppStore()
+  const { activeChannelId, channels, addMessage } = useAppStore()
+  const activeChannel = channels.find((c) => c._id === activeChannelId) ?? null
   const inputRef = useRef<HTMLInputElement>(null)
 
   const send = async (e: React.FormEvent) => {
@@ -15,7 +16,7 @@ export default function MessageInput() {
     if (!content.trim() || !channelId) return
     const { data } = await api.post(`/channels/${channelId}/messages`, { content })
     addMessage(data)
-    getSocket()?.emit('message:send', { channelId, messageId: data._id })
+    getSocket()?.emit('message:send', { channelId, message: data })
     setContent('')
   }
 
