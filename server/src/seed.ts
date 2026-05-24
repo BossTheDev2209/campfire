@@ -8,7 +8,13 @@ import Message from './models/Message'
 
 async function seed() {
   await mongoose.connect(process.env.MONGODB_URI ?? 'mongodb://localhost:27017/campfire')
-  await Promise.all([User, Server, Channel, Member, Message].map((M) => M.deleteMany({})))
+  await Promise.all([
+    User.deleteMany({}),
+    Server.deleteMany({}),
+    Channel.deleteMany({}),
+    Member.deleteMany({}),
+    Message.deleteMany({}),
+  ])
 
   const [u1, u2, u3] = await User.create([
     { username: 'admin', email: 'admin@campfire.dev', password: 'password123' },
