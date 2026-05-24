@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { User, Server, Channel, Message, Member } from '@/types'
+import { User, Server, Channel, Message, Member, VoiceState } from '@/types'
 
 interface AppState {
   user: User | null
@@ -7,6 +7,8 @@ interface AppState {
   activeServerId: string | null
   channels: Channel[]
   activeChannelId: string | null
+  activeVoiceChannelId: string | null
+  isSidebarOpen: boolean
   messages: Message[]
   members: Member[]
   onlineUsers: Set<string>
@@ -17,6 +19,8 @@ interface AppState {
   setActiveServerId: (id: string | null) => void
   setChannels: (channels: Channel[]) => void
   setActiveChannelId: (id: string | null) => void
+  setActiveVoiceChannelId: (id: string | null) => void
+  setSidebarOpen: (isOpen: boolean) => void
   setMessages: (messages: Message[]) => void
   prependMessages: (messages: Message[]) => void
   addMessage: (message: Message) => void
@@ -26,6 +30,8 @@ interface AppState {
   setUserOnline: (userId: string) => void
   setUserOffline: (userId: string) => void
   setVoiceUsers: (channelId: string, userIds: string[]) => void
+  setVoiceUsersFromStates: (states: VoiceState[]) => void
+  clearVoiceUsers: () => void
   addVoiceUser: (channelId: string, userId: string) => void
   removeVoiceUser: (channelId: string, userId: string) => void
 }
@@ -36,6 +42,8 @@ export const useAppStore = create<AppState>((set) => ({
   activeServerId: null,
   channels: [],
   activeChannelId: null,
+  activeVoiceChannelId: null,
+  isSidebarOpen: false,
   messages: [],
   members: [],
   onlineUsers: new Set(),
@@ -46,6 +54,8 @@ export const useAppStore = create<AppState>((set) => ({
   setActiveServerId: (activeServerId) => set({ activeServerId }),
   setChannels: (channels) => set({ channels }),
   setActiveChannelId: (activeChannelId) => set({ activeChannelId }),
+  setActiveVoiceChannelId: (activeVoiceChannelId) => set({ activeVoiceChannelId }),
+  setSidebarOpen: (isSidebarOpen) => set({ isSidebarOpen }),
   setMessages: (messages) => set({ messages }),
   prependMessages: (older) => set((s) => ({ messages: [...older, ...s.messages] })),
   addMessage: (message) => set((s) => ({ messages: [...s.messages, message] })),
@@ -68,11 +78,20 @@ export const useAppStore = create<AppState>((set) => ({
     }),
   setVoiceUsers: (channelId, userIds) =>
     set((s) => ({ voiceUsers: { ...s.voiceUsers, [channelId]: userIds } })),
+  setVoiceUsersFromStates: (states) =>
+    set(() => {
+      const voiceUsers = states.reduce<Record<string, string[]>>((acc, state) => {
+        acc[state.channelId] = [...(acc[state.channelId] ?? []), state.userId]
+        return acc
+      }, {})
+      return { voiceUsers }
+    }),
+  clearVoiceUsers: () => set({ voiceUsers: {}, activeVoiceChannelId: null }),
   addVoiceUser: (channelId, userId) =>
     set((s) => ({
       voiceUsers: {
         ...s.voiceUsers,
-        [channelId]: [...(s.voiceUsers[channelId] ?? []), userId],
+        [channelId]: Array.from(new Set([...(s.voiceUsers[channelId] ?? []), userId])),
       },
     })),
   removeVoiceUser: (channelId, userId) =>

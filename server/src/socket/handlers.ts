@@ -1,6 +1,8 @@
 import { Server, Socket } from 'socket.io'
 import jwt from 'jsonwebtoken'
 import User from '../models/User'
+import Channel from '../models/Channel'
+import VoiceState from '../models/VoiceState'
 
 export function setupSocket(io: Server) {
   io.use(async (socket, next) => {
@@ -44,11 +46,19 @@ export function setupSocket(io: Server) {
       await User.findByIdAndUpdate(userId, { status })
     })
 
-    socket.on('voice:join', ({ channelId }: any) => {
+    socket.on('voice:join', async ({ channelId, muted = false, deafened = false }: any) => {
+      const channel = await Channel.findById(channelId).select('serverId type')
+      if (!channel || channel.type !== 'voice') return
+      await VoiceState.findOneAndUpdate(
+        { channelId, userId },
+        { channelId, serverId: channel.serverId, userId, muted, deafened },
+        { upsert: true, new: true, setDefaultsOnInsert: true }
+      )
       socket.join(`voice_${channelId}`)
       io.to(`voice_${channelId}`).emit('voice:user-joined', { userId, channelId })
     })
-    socket.on('voice:leave', ({ channelId }: any) => {
+    socket.on('voice:leave', async ({ channelId }: any) => {
+      await VoiceState.findOneAndDelete({ channelId, userId })
       socket.leave(`voice_${channelId}`)
       io.to(`voice_${channelId}`).emit('voice:user-left', { userId, channelId })
     })
@@ -60,6 +70,14 @@ export function setupSocket(io: Server) {
 
     socket.on('disconnect', async () => {
       await User.findByIdAndUpdate(userId, { status: 'offline' })
+      const voiceStates = await VoiceState.find({ userId }).select('channelId')
+      await VoiceState.deleteMany({ userId })
+      voiceStates.forEach((state) => {
+        io.to(`voice_${state.channelId}`).emit('voice:user-left', {
+          userId,
+          channelId: state.channelId,
+        })
+      })
       io.emit('presence:update', { userId, status: 'offline' })
     })
   })

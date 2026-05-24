@@ -50,3 +50,14 @@ export interface InvitePreview {
   memberCount: number
   inviteCode: string
 }
+
+export interface VoiceState {
+  _id: string
+  serverId: string
+  channelId: string
+  userId: string
+  user?: User
+  muted: boolean
+  deafened: boolean
+  updatedAt: string
+}

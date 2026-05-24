@@ -5,6 +5,7 @@ import Server from './models/Server'
 import Channel from './models/Channel'
 import Member from './models/Member'
 import Message from './models/Message'
+import VoiceState from './models/VoiceState'
 
 async function seed() {
   await mongoose.connect(process.env.MONGODB_URI ?? 'mongodb://localhost:27017/campfire')
@@ -14,6 +15,7 @@ async function seed() {
     Channel.deleteMany({}),
     Member.deleteMany({}),
     Message.deleteMany({}),
+    VoiceState.deleteMany({}),
   ])
 
   const [u1, u2, u3] = await User.create([

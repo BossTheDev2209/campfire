@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Channel } from '@/types'
 import { useAppStore } from '@/store/appStore'
 import { useUIStore } from '@/store/uiStore'
+import { leaveVoiceChannel } from '@/hooks/useSocket'
 
 interface Props {
   channel: Channel
@@ -20,9 +21,10 @@ export default function VoiceArea({ channel }: Props) {
   const setDeafened = useUIStore((s) => s.setDeafened)
   const setCameraOn = useUIStore((s) => s.setCameraOn)
   const setScreenSharing = useUIStore((s) => s.setScreenSharing)
-  const setConnectedVoiceChannelId = useUIStore((s) => s.setConnectedVoiceChannelId)
-
-  const setMobileSidebarOpen = useUIStore((s) => s.setMobileSidebarOpen)
+  const activeVoiceChannelId = useAppStore((s) => s.activeVoiceChannelId)
+  const setActiveVoiceChannelId = useAppStore((s) => s.setActiveVoiceChannelId)
+  const setSidebarOpen = useAppStore((s) => s.setSidebarOpen)
+  const voiceUserIds = useAppStore((s) => s.voiceUsers[channel._id] ?? [])
 
   // Simulation of speaking states
   const [speakers, setSpeakers] = useState<Record<string, boolean>>({})
@@ -51,14 +53,17 @@ export default function VoiceArea({ channel }: Props) {
   }, [members, isMicMuted])
 
   const handleDisconnect = () => {
-    setConnectedVoiceChannelId(null)
+    leaveVoiceChannel(channel._id)
+    setActiveVoiceChannelId(null)
   }
 
-  // Get other members
+  const connectedUserIds = new Set(voiceUserIds)
+  const isSelfConnected = activeVoiceChannelId === channel._id
+  if (isSelfConnected && user?._id) connectedUserIds.add(user._id)
   const otherParticipants = members
     .map((m) => m.userId as any)
-    .filter((u) => u && u._id !== user?._id)
-    .slice(0, 5) // Display up to 5 other members
+    .filter((u) => u && u._id !== user?._id && connectedUserIds.has(u._id))
+    .slice(0, 5)
 
   return (
     <div className="flex-1 bg-claude-surfaceDark text-claude-onDark flex flex-col overflow-hidden relative">
@@ -67,7 +72,7 @@ export default function VoiceArea({ channel }: Props) {
         <div className="flex items-center min-w-0 gap-2">
           {/* Hamburger button for mobile */}
           <button
-            onClick={() => setMobileSidebarOpen(true)}
+            onClick={() => setSidebarOpen(true)}
             className="md:hidden p-1.5 rounded-claudeSm text-claude-onDarkSoft hover:text-claude-onDark hover:bg-claude-surfaceDarkSoft transition-colors flex shrink-0 -ml-1"
             title="Open sidebar"
           >
@@ -95,6 +100,7 @@ export default function VoiceArea({ channel }: Props) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-5xl max-h-full aspect-video">
           
           {/* Self Participant Card */}
+          {isSelfConnected && (
           <div className={`relative rounded-claudeLg bg-claude-surfaceDarkElevated overflow-hidden border-2 flex flex-col items-center justify-center p-6 aspect-video transition-all shadow-lg ${
             speakers['self'] && !isMicMuted
               ? 'border-claude-success shadow-[0_0_12px_rgba(93,184,114,0.2)] scale-[1.01]' 
@@ -133,6 +139,7 @@ export default function VoiceArea({ channel }: Props) {
               </span>
             )}
           </div>
+          )}
 
           {/* Other Participants Cards */}
           {otherParticipants.map((u, i) => {
@@ -180,7 +187,7 @@ export default function VoiceArea({ channel }: Props) {
           })}
 
           {/* Add a beautiful empty state if no one else is here */}
-          {otherParticipants.length === 0 && (
+          {!isSelfConnected && otherParticipants.length === 0 && (
             <div className="border border-dashed border-claude-onDarkSoft/20 rounded-claudeLg flex flex-col items-center justify-center p-6 aspect-video text-center">
               <span className="text-2xl mb-2">👋</span>
               <p className="text-sm font-medium text-claude-onDark">You are the first one here</p>

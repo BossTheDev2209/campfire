@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAppStore } from '@/store/appStore'
 import { useUIStore } from '@/store/uiStore'
+import { joinVoiceChannel, leaveVoiceChannel } from '@/hooks/useSocket'
 import clsx from 'clsx'
 
 interface Props {
@@ -8,7 +9,16 @@ interface Props {
 }
 
 export default function ChannelList({ error }: Props) {
-  const { activeServerId, servers, channels, voiceUsers, members, user } = useAppStore()
+  const {
+    activeServerId,
+    activeVoiceChannelId,
+    servers,
+    channels,
+    voiceUsers,
+    members,
+    user,
+    setActiveVoiceChannelId,
+  } = useAppStore()
   const { channelId, serverId } = useParams()
   const navigate = useNavigate()
   const activeServer = servers.find((s) => s._id === activeServerId) ?? null
@@ -17,14 +27,12 @@ export default function ChannelList({ error }: Props) {
   const textChannels = channels.filter((c) => c.type === 'text')
   const voiceChannels = channels.filter((c) => c.type === 'voice')
 
-  const connectedVoiceChannelId = useUIStore((s) => s.connectedVoiceChannelId)
-  const setConnectedVoiceChannelId = useUIStore((s) => s.setConnectedVoiceChannelId)
   const isMicMuted = useUIStore((s) => s.isMicMuted)
   const isDeafened = useUIStore((s) => s.isDeafened)
   const setMicMuted = useUIStore((s) => s.setMicMuted)
   const setDeafened = useUIStore((s) => s.setDeafened)
 
-  const connectedVoiceChannel = channels.find((c) => c._id === connectedVoiceChannelId) ?? null
+  const connectedVoiceChannel = channels.find((c) => c._id === activeVoiceChannelId) ?? null
 
   if (!activeServer) return (
     <div className="w-60 bg-claude-surfaceCard shrink-0 flex items-center justify-center border-r border-claude-hairline">
@@ -71,7 +79,7 @@ export default function ChannelList({ error }: Props) {
             <p className="text-[11px] font-semibold text-claude-muted uppercase px-2 mb-1 tracking-wide">Voice Channels</p>
             {voiceChannels.map((ch) => {
               const isActive = channelId === ch._id
-              const isJoined = connectedVoiceChannelId === ch._id
+              const isJoined = activeVoiceChannelId === ch._id
               
               // Get other connected users for this channel
               const channelUserIds = voiceUsers[ch._id] ?? []
@@ -89,7 +97,11 @@ export default function ChannelList({ error }: Props) {
                       if (targetServerId) {
                         navigate(`/app/${targetServerId}/${ch._id}`)
                       }
-                      setConnectedVoiceChannelId(ch._id)
+                      if (activeVoiceChannelId && activeVoiceChannelId !== ch._id) {
+                        leaveVoiceChannel(activeVoiceChannelId)
+                      }
+                      setActiveVoiceChannelId(ch._id)
+                      joinVoiceChannel(ch._id, isMicMuted, isDeafened)
                     }}
                     className={clsx(
                       'w-full min-w-0 text-left px-2 py-1.5 rounded-claudeMd flex items-center gap-2 text-sm transition-colors',
@@ -142,7 +154,7 @@ export default function ChannelList({ error }: Props) {
       {connectedVoiceChannel && (
         <div className="h-[52px] bg-claude-surfaceSoft border-t border-claude-hairline px-3 flex items-center justify-between shrink-0">
           <button
-            onClick={() => targetServerId && navigate(`/app/${targetServerId}/${connectedVoiceChannelId}`)}
+            onClick={() => targetServerId && activeVoiceChannelId && navigate(`/app/${targetServerId}/${activeVoiceChannelId}`)}
             className="flex items-center gap-2 min-w-0 text-left hover:opacity-80 transition-opacity flex-1"
             title="Go to call"
           >
@@ -179,7 +191,10 @@ export default function ChannelList({ error }: Props) {
               {isDeafened ? '🔇' : '🎧'}
             </button>
             <button
-              onClick={() => setConnectedVoiceChannelId(null)}
+              onClick={() => {
+                if (activeVoiceChannelId) leaveVoiceChannel(activeVoiceChannelId)
+                setActiveVoiceChannelId(null)
+              }}
               className="p-1.5 rounded-claudeSm text-claude-muted hover:text-claude-error hover:bg-claude-surfaceCreamStrong transition-colors flex items-center justify-center"
               title="Disconnect"
             >

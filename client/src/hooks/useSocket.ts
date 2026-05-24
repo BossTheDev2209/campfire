@@ -43,6 +43,14 @@ export function leaveChannel(channelId: string): void {
   socket?.emit('channel:leave', channelId)
 }
 
+export function joinVoiceChannel(channelId: string, muted = false, deafened = false): void {
+  socket?.emit('voice:join', { channelId, muted, deafened })
+}
+
+export function leaveVoiceChannel(channelId: string): void {
+  socket?.emit('voice:leave', { channelId })
+}
+
 export function useSocket() {
   const { addMessage, updateMessage, removeMessage, setUserOnline, setUserOffline, addVoiceUser, removeVoiceUser } = useAppStore()
   const initialized = useRef(false)

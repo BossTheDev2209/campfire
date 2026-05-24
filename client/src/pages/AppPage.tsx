@@ -7,7 +7,6 @@ import MembersList from '@/components/layout/MembersList'
 import { joinChannel, joinServer, leaveChannel, useSocket } from '@/hooks/useSocket'
 import { useMembers } from '@/hooks/useMembers'
 import { useAppStore } from '@/store/appStore'
-import { useUIStore } from '@/store/uiStore'
 import api from '@/api'
 
 export default function AppPage() {
@@ -19,17 +18,19 @@ export default function AppPage() {
     setChannels,
     setMembers,
     setMessages,
+    setVoiceUsersFromStates,
+    clearVoiceUsers,
     setActiveServerId,
     setActiveChannelId,
     activeServerId,
     activeChannelId,
+    isSidebarOpen,
+    setSidebarOpen,
   } = useAppStore()
-
-  const isMobileSidebarOpen = useUIStore((s) => s.isMobileSidebarOpen)
-  const setMobileSidebarOpen = useUIStore((s) => s.setMobileSidebarOpen)
 
   const [serverLoadError, setServerLoadError] = useState<string | null>(null)
   const [channelLoadError, setChannelLoadError] = useState<string | null>(null)
+  const [voiceStateLoadError, setVoiceStateLoadError] = useState<string | null>(null)
   const { error: memberLoadError } = useMembers(serverId ?? null)
 
   useEffect(() => {
@@ -46,16 +47,34 @@ export default function AppPage() {
       setChannels([])
       setMembers([])
       setMessages([])
+      clearVoiceUsers()
       return
     }
 
     setActiveServerId(serverId)
     setChannelLoadError(null)
+    setVoiceStateLoadError(null)
 
     api.get(`/servers/${serverId}/channels`)
       .then((r) => setChannels(r.data))
       .catch(() => setChannelLoadError('Channels could not load.'))
-  }, [serverId, setActiveServerId, setActiveChannelId, setChannels, setMembers, setMessages])
+
+    api.get(`/servers/${serverId}/voice-states`)
+      .then((r) => setVoiceUsersFromStates(r.data))
+      .catch(() => {
+        clearVoiceUsers()
+        setVoiceStateLoadError('Voice participants could not load.')
+      })
+  }, [
+    serverId,
+    setActiveServerId,
+    setActiveChannelId,
+    setChannels,
+    setMembers,
+    setMessages,
+    setVoiceUsersFromStates,
+    clearVoiceUsers,
+  ])
 
   useEffect(() => {
     setActiveChannelId(channelId ?? null)
@@ -79,29 +98,29 @@ export default function AppPage() {
 
   // Automatically close mobile sidebar on navigation
   useEffect(() => {
-    setMobileSidebarOpen(false)
-  }, [serverId, channelId, setMobileSidebarOpen])
+    setSidebarOpen(false)
+  }, [serverId, channelId, setSidebarOpen])
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-claude-canvas text-claude-ink font-claudeSans relative">
       {/* Desktop sidebars */}
       <div className="hidden md:flex shrink-0">
         <ServerList error={serverLoadError} />
-        <ChannelList error={channelLoadError} />
+        <ChannelList error={channelLoadError ?? voiceStateLoadError} />
       </div>
 
       {/* Mobile sidebar overlay drawer */}
-      {isMobileSidebarOpen && (
+      {isSidebarOpen && (
         <div className="fixed inset-0 z-50 flex md:hidden">
           {/* Backdrop */}
           <div
             className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
-            onClick={() => setMobileSidebarOpen(false)}
+            onClick={() => setSidebarOpen(false)}
           />
           {/* Drawer content container */}
           <div className="relative flex h-full max-w-[312px] shadow-2xl z-10 animate-[slideIn_0.2s_ease-out]">
             <ServerList error={serverLoadError} />
-            <ChannelList error={channelLoadError} />
+            <ChannelList error={channelLoadError ?? voiceStateLoadError} />
           </div>
         </div>
       )}

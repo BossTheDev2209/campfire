@@ -4,20 +4,19 @@ import MessageList from './MessageList'
 import MessageInput from './MessageInput'
 import SearchBar from './SearchBar'
 import VoiceArea from '../channel/VoiceArea'
-import { useUIStore } from '@/store/uiStore'
 
 export default function ChatArea() {
   const activeChannelId = useAppStore((s) => s.activeChannelId)
   const channels = useAppStore((s) => s.channels)
+  const setSidebarOpen = useAppStore((s) => s.setSidebarOpen)
   const activeChannel = channels.find((c) => c._id === activeChannelId) ?? null
   const [isSearchActive, setIsSearchActive] = useState(false)
-  const setMobileSidebarOpen = useUIStore((s) => s.setMobileSidebarOpen)
 
   if (!activeChannel) return (
     <div className="flex-1 min-w-0 bg-claude-canvas flex items-center justify-center relative">
       {/* Mobile top-left menu trigger */}
       <button
-        onClick={() => setMobileSidebarOpen(true)}
+        onClick={() => setSidebarOpen(true)}
         className="md:hidden absolute top-3 left-3 p-1.5 rounded-claudeSm text-claude-muted hover:text-claude-ink hover:bg-claude-surfaceSoft transition-colors"
         title="Open sidebar"
       >
@@ -52,7 +51,7 @@ export default function ChatArea() {
         <div className="flex items-center min-w-0 gap-2">
           {/* Hamburger button for mobile */}
           <button
-            onClick={() => setMobileSidebarOpen(true)}
+            onClick={() => setSidebarOpen(true)}
             className="md:hidden p-1.5 rounded-claudeSm text-claude-muted hover:text-claude-ink hover:bg-claude-surfaceSoft transition-colors flex shrink-0 -ml-1"
             title="Open sidebar"
           >
