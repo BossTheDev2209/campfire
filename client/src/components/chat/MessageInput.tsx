@@ -16,7 +16,7 @@ export default function MessageInput() {
     if (!content.trim() || !channelId) return
     const { data } = await api.post(`/channels/${channelId}/messages`, { content })
     addMessage(data)
-    getSocket()?.emit('message:send', { channelId, messageId: data._id })
+    getSocket()?.emit('message:send', { channelId, message: data })
     setContent('')
   }
 
