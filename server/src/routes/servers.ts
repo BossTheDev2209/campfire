@@ -15,12 +15,16 @@ router.get('/', async (req: AuthRequest, res) => {
 })
 
 router.get('/:id', async (req: AuthRequest, res) => {
+  const membership = await Member.findOne({ serverId: req.params.id, userId: req.userId })
+  if (!membership) return res.status(403).json({ error: 'Not a member of this server' })
   const server = await Server.findById(req.params.id)
   if (!server) return res.status(404).json({ error: 'Not found' })
   res.json(server)
 })
 
 router.get('/:id/members', async (req: AuthRequest, res) => {
+  const membership = await Member.findOne({ serverId: req.params.id, userId: req.userId })
+  if (!membership) return res.status(403).json({ error: 'Not a member of this server' })
   const members = await Member.find({ serverId: req.params.id }).populate('userId', '-password')
   res.json(members)
 })

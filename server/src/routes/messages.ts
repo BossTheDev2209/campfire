@@ -7,20 +7,25 @@ router.use(requireAuth)
 
 router.get('/channels/:channelId/messages', async (req: AuthRequest, res) => {
   const { before, limit = '50' } = req.query as any
+  const clampedLimit = Math.min(Math.max(Number(limit), 1), 100)
   const query: any = { channelId: req.params.channelId }
   if (before) query.createdAt = { $lt: new Date(before) }
   const messages = await Message.find(query)
     .sort({ createdAt: -1 })
-    .limit(Number(limit))
+    .limit(clampedLimit)
     .populate('authorId', 'username avatar status')
     .lean()
   const shaped = messages.reverse().map((m: any) => ({ ...m, author: m.authorId }))
   res.json(shaped)
 })
 
+const MAX_MESSAGE_LENGTH = 2000
+
 router.post('/channels/:channelId/messages', async (req: AuthRequest, res) => {
   const { content } = req.body
   if (!content?.trim()) return res.status(400).json({ error: 'Content required' })
+  if (content.trim().length > MAX_MESSAGE_LENGTH)
+    return res.status(400).json({ error: `Message too long (max ${MAX_MESSAGE_LENGTH} characters)` })
   const msg = await Message.create({ channelId: req.params.channelId, authorId: req.userId, content })
   const populated = await msg.populate('authorId', 'username avatar status')
   const shaped: any = populated.toObject()

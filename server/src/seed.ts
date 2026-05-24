@@ -45,12 +45,25 @@ async function seed() {
 
   const msgs = [
     'Welcome to Campfire! 🔥',
+    'Hey everyone, glad to be here!',
     'This is the real-time chat system.',
     'Try sending a message below!',
     'You can edit or delete your own messages.',
     'Voice channels are on the left too.',
     'This is seeded data from the seed script.',
+    'The invite code for this server is CAMP1234.',
+    'Feel free to explore all the channels.',
+    'Real-time updates happen via Socket.io.',
     'Good luck in the competition! 🚀',
+    'The tech stack is React + Express + MongoDB.',
+    'Tailwind CSS makes styling fast.',
+    'Zustand handles our frontend state.',
+    'You can search messages using the search bar.',
+    'Members panel shows who is online.',
+    'Status dots show online, idle, dnd, or offline.',
+    'This demo supports multiple servers.',
+    'Check out the Dev Zone server too!',
+    'Have fun building with Campfire! 🏕️',
   ]
   const authors = [u1, u2, u3]
   await Message.create(
@@ -61,9 +74,14 @@ async function seed() {
     }))
   )
 
-  console.log('Seeded successfully!')
-  console.log('Test accounts: admin/alice/bob — password: password123')
-  console.log('Invite codes: CAMP1234, DEV56789')
+  console.log('\n✅ Seeded successfully!\n')
+  console.log('Login credentials (password: password123):')
+  console.log('  admin@campfire.dev')
+  console.log('  alice@campfire.dev')
+  console.log('  bob@campfire.dev')
+  console.log('\nInvite codes:')
+  console.log('  CAMP1234  →  Campfire HQ')
+  console.log('  DEV56789  →  Dev Zone')
   await mongoose.disconnect()
 }
 
