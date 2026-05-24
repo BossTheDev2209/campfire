@@ -30,8 +30,8 @@ export function setupSocket(io: Server) {
       io.to(`server_${serverId}`).emit('presence:update', { userId, status: 'online' })
     })
 
-    socket.on('message:send', ({ channelId, messageId }: any) => {
-      socket.to(`channel_${channelId}`).emit('message:new', { messageId })
+    socket.on('message:send', ({ channelId, message }: any) => {
+      socket.to(`channel_${channelId}`).emit('message:new', message)
     })
     socket.on('message:edit', (payload: any) => {
       socket.to(`channel_${payload.channelId}`).emit('message:updated', payload)

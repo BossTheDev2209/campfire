@@ -7,39 +7,43 @@ export default function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const { setAuth } = useAuthStore()
   const navigate = useNavigate()
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setLoading(true)
     try {
       const { data } = await api.post('/auth/login', { email, password })
       setAuth(data.token, data.user)
       navigate('/app')
     } catch (err: any) {
       setError(err.response?.data?.error ?? 'Login failed')
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
     <form onSubmit={submit} className="flex flex-col gap-4">
-      {error && <p className="text-dc-red text-sm">{error}</p>}
+      {error && <p className="rounded-claudeMd bg-claude-surfaceSoft px-3 py-2 text-claude-error text-sm border border-claude-hairline">{error}</p>}
       <label className="flex flex-col gap-1">
-        <span className="text-xs font-semibold text-dc-muted uppercase tracking-wide">Email</span>
+        <span className="text-xs font-semibold text-claude-muted uppercase tracking-wide">Email</span>
         <input value={email} onChange={(e) => setEmail(e.target.value)}
           type="email" required autoComplete="email"
-          className="bg-dc-bg text-dc-text rounded px-3 py-2 outline-none focus:ring-2 focus:ring-dc-accent text-sm" />
+          className="h-10 w-full rounded-claudeMd border border-claude-hairline bg-claude-canvas px-3 text-sm text-claude-ink outline-none focus:border-claude-primary focus:ring-2 focus:ring-claude-primary/15" />
       </label>
       <label className="flex flex-col gap-1">
-        <span className="text-xs font-semibold text-dc-muted uppercase tracking-wide">Password</span>
+        <span className="text-xs font-semibold text-claude-muted uppercase tracking-wide">Password</span>
         <input value={password} onChange={(e) => setPassword(e.target.value)}
           type="password" required autoComplete="current-password"
-          className="bg-dc-bg text-dc-text rounded px-3 py-2 outline-none focus:ring-2 focus:ring-dc-accent text-sm" />
+          className="h-10 w-full rounded-claudeMd border border-claude-hairline bg-claude-canvas px-3 text-sm text-claude-ink outline-none focus:border-claude-primary focus:ring-2 focus:ring-claude-primary/15" />
       </label>
-      <button type="submit"
-        className="bg-dc-accent hover:bg-indigo-500 text-white rounded py-2 font-semibold transition-colors mt-2">
-        Log In
+      <button type="submit" disabled={loading}
+        className="h-10 w-full rounded-claudeMd bg-claude-primary px-4 text-sm font-medium text-claude-onPrimary hover:bg-claude-primaryActive disabled:bg-claude-primaryDisabled disabled:text-claude-mutedSoft transition-colors mt-2">
+        {loading ? 'Signing in...' : 'Log In'}
       </button>
     </form>
   )
